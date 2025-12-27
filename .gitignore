@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Data - IMPORTANT: This prevents your local data from being uploaded
+data/
+
+# OS and IDE specific
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ollama logs (if any)
+ollama_logs/
