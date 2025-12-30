@@ -1,19 +1,22 @@
-# Python
-.venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# ChromaDB
+chroma_db/
+chroma_db_discord/
+chroma_db_github/
 
-# Data - IMPORTANT: This prevents your local data from being uploaded
+# Logs
+queries_and_answers.log
+
+# Data
+discord_cleaned.json
+github_cleaned.json
 data/
 
-# OS and IDE specific
-.DS_Store
-.vscode/
-.idea/
-*.swp
-*.swo
+# Python
+.venv/
+venv/
+venv_gemini/
+__pycache__/
+*.pyc
 
-# Ollama logs (if any)
-ollama_logs/
+# OS generated files
+.DS_Store
