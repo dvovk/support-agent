@@ -8,6 +8,7 @@ queries_and_answers.log
 
 # Data
 discord_cleaned.json
+github_cleaned.json
 data/
 
 # Python

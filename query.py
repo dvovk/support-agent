@@ -6,7 +6,9 @@ from langchain_ollama import OllamaLLM as Ollama # Updated import and aliasing f
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from sentence_transformers import CrossEncoder # Using a cross-encoder for re-ranking
 import logging
+import os
 
 # --- Configuration ---
 PERSIST_DIRECTORY = "chroma_db"
@@ -45,6 +47,24 @@ def main(question: str):
     
     # Combine and de-duplicate if necessary (simple combination for now)
     retrieved_docs = github_docs + discord_docs
+
+    # --- Re-ranking with a cross-encoder ---
+    logger.info("Initializing cross-encoder for re-ranking...")
+    cross_encoder = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
+    
+    # Create pairs of [question, document_content] for the cross-encoder
+    pairs = [[question, doc.page_content] for doc in retrieved_docs]
+    
+    # Predict the scores
+    scores = cross_encoder.predict(pairs)
+    
+    # Combine docs with their scores and sort
+    scored_docs = sorted(zip(scores, retrieved_docs), key=lambda x: x[0], reverse=True)
+    
+    # Keep the top N documents (e.g., top 4)
+    top_n = 4
+    retrieved_docs = [doc for score, doc in scored_docs[:top_n]]
+    logger.info(f"Re-ranked documents (top {top_n}): {len(retrieved_docs)}")
     
     # --- Debugging Output ---
     print("\n" + "="*50)
